@@ -1,4 +1,6 @@
+import copy
 import random
+from random import shuffle, randrange
 import time
 
 class MazeUtilities(object):
@@ -9,34 +11,68 @@ class MazeUtilities(object):
     """
 
     @staticmethod
-    def generate_random_maze(x=10, y=10, wall_chance=20):
-        maze = []
-        for col in range(x):
-            row = []
-            for pos in range(y):
-                # we
-                dice = random.randint(1,wall_chance)
-                if dice == 1:
-                    row.append(1)
-                else:
-                    row.append(0)
-            maze.append(row)
-        # chose a random place for the exit
-        x_exit = random.randint(0, x-1)
-        y_exit = random.randint(0, y-1)
-        maze[x_exit][y_exit]=2
-        return maze
+    def generate_random_maze(w=16, h=8):
+        """
+        Generate a random solveable maze with height and width w.
+
+        :param h: (INT) the height of the maze
+        :param w: (INT) the width of the maze
+        :return maze: (LIST of LISTS) A list of length h containing containing
+                      lists of length w representing a maze. Walls are defined
+                      as 1, passages defined as 0.
+        :raises ValueError: raises an exception if param values are too small
+                            (less than 5), or too large (greater than 40).
+        """
+
+        if not (5 <= w <= 40):
+            raise ValueError("width: {0} was not in the appropriate range of"
+                             " 5 - 40".format(w))
+        if not(5 <= h <= 40):
+            raise ValueError("height: {0} was not in the appropriate range of"
+                             " 5 - 40".format(h))
+    	vis = [[0] * w + [1] for _ in range(h)] + [[1] * (w + 1)]
+    	ver = [["10"] * w + ['1'] for _ in range(h)] + [[]]
+    	hor = [["11"] * w + ['1'] for _ in range(h + 1)]
+
+    	def walk(x, y):
+    		vis[y][x] = 1
+
+    		d = [(x - 1, y), (x, y + 1), (x + 1, y), (x, y - 1)]
+    		shuffle(d)
+    		for (xx, yy) in d:
+    			if vis[yy][xx]: continue
+    			if xx == x: hor[max(y, yy)][x] = "10"
+    			if yy == y: ver[y][max(x, xx)] = "00"
+    			walk(xx, yy)
+
+    	walk(randrange(w), randrange(h))
+    	maze = []
+    	for (a, b) in zip(hor, ver):
+    		if a:
+    			row1 = ''.join(a)
+    		row2 = ''.join(b)
+    		r1_ls = []
+    		r2_ls = []
+    		for thing in row1:
+    			thing = int(thing)
+    			r1_ls.append(thing)
+    		for thing in row2:
+    			thing = int(thing)
+    			r2_ls.append(thing)
+    		if r1_ls:
+    			maze.append(r1_ls)
+    		if r2_ls:
+    			maze.append(r2_ls)
+
+    	return maze
+
 
     @staticmethod
     def get_starting_point(maze, random=False):
         if random:
-            x = random.randomInt(0, x-1)
-            y = random.randomInt(0, y-1)
-            while not MazeUtilities.is_valid(x, y, maze):
-                x = random.randomInt(0, x-1)
-                y = random.randomInt(0, y-1)
+            return MazeUtilities.get_random_point(maze=maze)
         else:
-            # start in the upper left hand corner
+            # start in the upper left corner
             x = 0
             y = 0
             while not MazeUtilities.is_valid(x, y, maze):
@@ -49,12 +85,53 @@ class MazeUtilities(object):
         return x, y
 
     @staticmethod
+    def get_ending_point(maze, random=False):
+        if random:
+            return MazeUtilities.get_random_point(maze=maze)
+        else:
+            # start in the bottom right corner
+            x = len(maze[0]) - 1
+            y = len(maze) - 1
+            while not MazeUtilities.is_valid(x, y, maze):
+                if x < 0:
+                    x = len(maze[0]) - 1
+                if y < 0:
+                    y = len(maze) - 1
+                x = x - 1
+                y = y - 1
+        return x, y
+
+    @staticmethod
+    def get_random_point(maze):
+        w = len(maze[0]) - 1
+        h = len(maze) - 1
+        x = random.randint(0, w)
+        y = random.randint(0, h)
+        while not MazeUtilities.is_valid(x=x, y=y, maze=maze):
+            x = random.randint(0, w)
+            y = random.randint(0, h)
+        return x, y
+
+    @staticmethod
+    def move(maze, x, y):
+        # mark where we are
+        #print maze
+        if maze[y][x] == 2:
+            maze[y][x]='**'
+        maze[y][x]='P'
+
+        #MazeUtilities.print_maze(maze)
+        #time.sleep(0.25)
+
+        return maze
+
+    @staticmethod
     def print_maze(maze):
-        print "="*24
+        print "+" + "="*len(maze[0])*4 + "+"
         for column in maze:
-            row = []
+            row = ["|"]
             for position in column:
-                if position == 1:
+                if position == '1':
                     row.append("####")
                 if position == 2:
                     row.append("!EE!")
@@ -64,19 +141,43 @@ class MazeUtilities(object):
                     row.append("    ")
                 if position == 'P':
                     row.append("XXXX")
+            row.append("|")
             print "".join(row)
             print "".join(row)
-        print "="*24
+        print "+" + "="*len(maze[0])*4 + "+"
         print "\n"
 
     @staticmethod
+    def print_maze_small(maze):
+        print "+" + "="*len(maze[0])*2 + "+"
+        for column in maze:
+            row = ["|"]
+            for position in column:
+                if position == 1:
+                    row.append("##")
+                if position == 2:
+                    row.append("EE")
+                if position == 3:
+                    row.append("::")
+                if position == 0:
+                    row.append("  ")
+                if position == 'P':
+                    row.append("::")
+            row.append("|")
+            #print "".join(row)
+            print "".join(row)
+        print "+" + "="*len(maze[0])*2 + "+"
+        print "\n"
+
+
+    @staticmethod
     def is_valid(x, y, maze):
-        x_is_valid = (-1 < x < len(maze) - 1 and maze[x][y] != 1)
-        if x_is_valid:
-            y_is_valid = (-1 < y < len(maze[x]) - 1 and maze[x][y] != 1)
+        x_is_valid = (-1 < x < len(maze[0]))
+        y_is_valid = (-1 < y < len(maze))
+        if (x_is_valid and y_is_valid):
+            return (maze[y][x] != 1)
         else:
             return False
-        return (x_is_valid and y_is_valid)
 
     @staticmethod
     def get_available_moves(x, y, maze):
@@ -84,15 +185,15 @@ class MazeUtilities(object):
         moves = []
 
         # try to the left of x
-        if MazeUtilities.is_valid(x-1, y, maze):
+        if MazeUtilities.is_valid(x=x-1, y=y, maze=maze) and maze[y][x-1] != 3:
             moves.append((x-1, y))
         # try to the right of x
-        if MazeUtilities.is_valid(x+1, y, maze):
+        if MazeUtilities.is_valid(x=x+1, y=y, maze=maze) and maze[y][x+1] != 3:
             moves.append((x+1, y))
         # try above y
-        if MazeUtilities.is_valid(x, y-1, maze):
+        if MazeUtilities.is_valid(x=x, y=y-1, maze=maze) and maze[y-1][x] != 3:
             moves.append((x, y-1))
         # try below y
-        if MazeUtilities.is_valid(x, y+1, maze):
+        if MazeUtilities.is_valid(x=x, y=y+1, maze=maze) and maze[y+1][x] != 3:
             moves.append((x, y+1))
         return moves
