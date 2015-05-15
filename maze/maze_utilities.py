@@ -1,3 +1,12 @@
+#----------------------------------------------------------------------
+#  maze_utilities.py
+#
+#  Utilities for a simple maze demonstration script. 
+#
+#  AUTHOR - Anna Eilering
+#  LAST REVISED - 5/15/15
+#----------------------------------------------------------------------
+
 import copy
 import random
 from random import shuffle, randrange

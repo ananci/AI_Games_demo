@@ -1,3 +1,13 @@
+#----------------------------------------------------------------------
+#  maze.py
+#  requires maze_utilities.py
+#
+#  A simple maze demonstration script. Automatically generates a
+#  solvable maze and then solves it using DFS and BFS search algorithms.
+#
+#  AUTHOR - Anna Eilering
+#  LAST REVISED - 5/15/15
+#----------------------------------------------------------------------
 import argparse
 import copy
 import random
