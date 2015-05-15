@@ -11,12 +11,30 @@ class MazeUtilities(object):
     """
 
     @staticmethod
-    def generate_random_maze(w=16, h=8):
+    def generate_empty_maze(w=20, h=20):
+        maze = []
+        top_row = [1]*(w*2 + 1)
+        maze.append(top_row)
+        for y in range(h):
+            row = [1]
+            for x in range(w):
+                row.append(0)
+                row.append(0)
+            row.pop()
+            row.append(1)
+            maze.append(row)
+            maze.append(row)
+        maze.pop()
+        maze.append(top_row)
+        return maze
+
+    @staticmethod
+    def generate_random_maze(w=20, h=20):
         """
         Generate a random solveable maze with height and width w.
 
-        :param h: (INT) the height of the maze
-        :param w: (INT) the width of the maze
+        :param h: (INT) the height of the maze, default 20
+        :param w: (INT) the width of the maze, default 20
         :return maze: (LIST of LISTS) A list of length h containing containing
                       lists of length w representing a maze. Walls are defined
                       as 1, passages defined as 0.
