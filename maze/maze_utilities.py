@@ -1,7 +1,7 @@
 #----------------------------------------------------------------------
 #  maze_utilities.py
 #
-#  Utilities for a simple maze demonstration script. 
+#  Utilities for a simple maze demonstration script.
 #
 #  AUTHOR - Anna Eilering
 #  LAST REVISED - 5/15/15
@@ -224,3 +224,39 @@ class MazeUtilities(object):
         if MazeUtilities.is_valid(x=x, y=y+1, maze=maze) and maze[y+1][x] != 3:
             moves.append((x, y+1))
         return moves
+
+    @staticmethod
+    def convert_to_maze(raw):
+        maze = []
+        for row in  raw:
+            if "+" in row:
+                continue
+            else:
+                row_ls = []
+                row = row.replace("|", "")
+                for i in xrange(0, len(row), 2):
+                    block = row[i:i+2]
+                    if block == "##":
+                        row_ls.append(1)
+                    elif block == "EE":
+                        row_ls.append(2)
+                    elif block == "::":
+                        row_ls.append(3)
+                    else:
+                        row_ls.append(0)
+                maze.append(row_ls)
+
+        start_x = 0
+        start_y = 0
+        end_x = 0
+        end_y = 0
+        # now find the starting and ending points
+        for y in range(len(maze)):
+            for x in range(len(maze[y])):
+                if maze[y][x] == 3:
+                    start_x = x
+                    start_y = y
+                if maze[y][x] == 2:
+                    end_x = x
+                    end_y = y
+        return ((start_x, start_y), (end_x, end_y), maze)
