@@ -5,7 +5,8 @@ This repository contains python modules chosen to demonstrate fundamental concep
 
 This repository is a work in progress. Use at your own risk.
 
-- - -
+- - -m
+
 
 ## In This Repository
 
@@ -74,6 +75,7 @@ Please enter your selection:
 ```
 $ python maze.py -h
 usage: maze.py [-h] [-x WIDTH] [-y HEIGHT] [-rs] [-rg] [-e] [-d DELAY]
+               [-f FILE]
 
 Maze pathfinder demonstration
 
@@ -92,6 +94,7 @@ optional arguments:
   -d DELAY, --delay DELAY
                         Timed delay for presenting the path of the solved
                         maze. Defaults to .25 seconds.
+  -f FILE, --file FILE  A filepath containing a previously generated maze
 ```
 
 - - -
