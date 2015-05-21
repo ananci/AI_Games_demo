@@ -47,7 +47,7 @@ def random_search(startingNode, maze):
     """
     Random Search Implementation.
 
-    BFS implementation that keeps track of visited nodes. Uses a list as a
+    Random implementation that keeps track of visited nodes. Uses a list as a
     queue. Returns the list of visited nodes.
     """
     visitedNodes = []
@@ -82,11 +82,13 @@ def depth_first(startingNode, maze):
     stack. Returns the list of visited nodes.
     """
     visitedNodes = []
-    stack = [startingNode]
+    ls = [startingNode]
     #print stack
 
-    while len(stack) > 0:
-        node = stack.pop()
+    while len(ls) > 0:
+        #node = ls.pop()
+        node = ls[-1]
+        ls.remove(node)
         #print "NODE:" +  str(node)
         if node in visitedNodes:
             continue
@@ -100,7 +102,7 @@ def depth_first(startingNode, maze):
         #print children
         for n in children:
             if n not in visitedNodes:
-                stack.append(n)
+                ls.append(n)
     return visitedNodes
 
 def breadth_first(startingNode, maze):
@@ -111,11 +113,13 @@ def breadth_first(startingNode, maze):
     queue. Returns the list of visited nodes.
     """
     visitedNodes = []
-    queue = [startingNode]
-    #print queue
+    ls = [startingNode]
+    #print stack
 
-    while len(queue) > 0:
-        node = queue.pop(0)
+    while len(ls) > 0:
+        #node = ls.pop()
+        node = ls[0]
+        ls.remove(node)
         #print "NODE:" +  str(node)
         if node in visitedNodes:
             continue
@@ -129,32 +133,32 @@ def breadth_first(startingNode, maze):
         #print children
         for n in children:
             if n not in visitedNodes:
-                queue.append(n)
+                ls.append(n)
     return visitedNodes
 
 def print_results(results):
-    print "="*24
-    print "RESULTS"
-    print "="*24
+    print("="*24)
+    print("RESULTS")
+    print("="*24)
     for search_method, result in results.iteritems():
-        print search_method
-        print result
-        print "-"*24
+        print(search_method)
+        print(result)
+        print("-"*24)
 
 def print_menu(methods, results, maze, delay):
 
     while True:
         temp_maze = copy.deepcopy(maze)
-        print "="*24
-        print "MENU"
-        print "="*24
-        print "Please choose:"
+        print("="*24)
+        print("MENU")
+        print("="*24)
+        print("Please choose:")
         for item in results:
-            print "\t To view {item} path please enter '{item}-PATH'".format(item=item)
-            print "\t To view {item} results please enter '{item}-RESULTS'".format(item=item)
-        print "\t To view all results please enter 'ALL'"
-        print "\t To regenerate the maze and paths please enter 'AGAIN'"
-        print "\t To exit please enter 'EXIT'"
+            print("\t To view {item} path please enter '{item}-PATH'".format(item=item))
+            print("\t To view {item} results please enter '{item}-RESULTS'".format(item=item))
+        print("\t To view all results please enter 'ALL'")
+        print("\t To regenerate the maze and paths please enter 'AGAIN'")
+        print("\t To exit please enter 'EXIT'")
 
         in_value = raw_input("Please enter your selection: ")
         in_value = in_value.upper()
@@ -166,8 +170,8 @@ def print_menu(methods, results, maze, delay):
 
         if in_value == "ALL":
             for key, value in results.iteritems():
-                print "-"*24
-                print value
+                print("-"*24)
+                print(value)
 
         elif "-PATH" in in_value:
             in_path = in_value.replace("-PATH", "")
@@ -179,17 +183,17 @@ def print_menu(methods, results, maze, delay):
                 time.sleep(delay)
         elif "-RESULTS" in in_value:
             in_res = in_value.replace("-RESULTS", "")
-            print in_res
+            print(in_res)
             res = results[in_res]
-            print res
+            print(res)
         else:
-            print "Not a valid input"
-        print ""
+            print("Not a valid input")
+        print("")
     # Just in case
     return False
 
 def main(width, height, random_start, random_goal, empty, delay, starting_node=None, ending_node=None, maze=None):
-        print "\nGENERATED MAZE:"
+        print("\nGENERATED MAZE:")
         if maze:
             pass
         elif empty:
@@ -201,13 +205,13 @@ def main(width, height, random_start, random_goal, empty, delay, starting_node=N
             start_node = starting_node
         else:
             start_node = MazeUtilities.get_starting_point(maze=maze, random=random_start)
-        print "STARING AT {0}".format(start_node)
+        print("STARING AT {0}".format(start_node))
 
         if ending_node:
             end_node = ending_node
         else:
             end_node = MazeUtilities.get_ending_point(maze=maze, random=random_goal)
-        print "GOAL AT {0}".format(end_node)
+        print("GOAL AT {0}".format(end_node))
 
         goal_x, goal_y = end_node
         start_x, start_y = start_node

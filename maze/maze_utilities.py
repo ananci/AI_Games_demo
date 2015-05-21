@@ -154,7 +154,7 @@ class MazeUtilities(object):
 
     @staticmethod
     def print_maze(maze):
-        print "+" + "="*len(maze[0])*4 + "+"
+        print("+" + "="*len(maze[0])*4 + "+")
         for column in maze:
             row = ["|"]
             for position in column:
@@ -169,14 +169,14 @@ class MazeUtilities(object):
                 if position == 'P':
                     row.append("XXXX")
             row.append("|")
-            print "".join(row)
-            print "".join(row)
-        print "+" + "="*len(maze[0])*4 + "+"
-        print "\n"
+            print("".join(row))
+            print("".join(row))
+        print("+" + "="*len(maze[0])*4 + "+")
+        print("\n")
 
     @staticmethod
     def print_maze_small(maze):
-        print "+" + "="*len(maze[0])*2 + "+"
+        print("+" + "="*len(maze[0])*2 + "+")
         for column in maze:
             row = ["|"]
             for position in column:
@@ -192,9 +192,9 @@ class MazeUtilities(object):
                     row.append("::")
             row.append("|")
             #print "".join(row)
-            print "".join(row)
-        print "+" + "="*len(maze[0])*2 + "+"
-        print "\n"
+            print("".join(row))
+        print("+" + "="*len(maze[0])*2 + "+")
+        print("\n")
 
 
     @staticmethod
