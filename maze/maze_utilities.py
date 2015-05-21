@@ -57,41 +57,41 @@ class MazeUtilities(object):
         if not(5 <= h <= 40):
             raise ValueError("height: {0} was not in the appropriate range of"
                              " 5 - 40".format(h))
-    	vis = [[0] * w + [1] for _ in range(h)] + [[1] * (w + 1)]
-    	ver = [["10"] * w + ['1'] for _ in range(h)] + [[]]
-    	hor = [["11"] * w + ['1'] for _ in range(h + 1)]
+        vis = [[0] * w + [1] for _ in range(h)] + [[1] * (w + 1)]
+        ver = [["10"] * w + ['1'] for _ in range(h)] + [[]]
+        hor = [["11"] * w + ['1'] for _ in range(h + 1)]
 
-    	def walk(x, y):
-    		vis[y][x] = 1
+        def walk(x, y):
+            vis[y][x] = 1
 
-    		d = [(x - 1, y), (x, y + 1), (x + 1, y), (x, y - 1)]
-    		shuffle(d)
-    		for (xx, yy) in d:
-    			if vis[yy][xx]: continue
-    			if xx == x: hor[max(y, yy)][x] = "10"
-    			if yy == y: ver[y][max(x, xx)] = "00"
-    			walk(xx, yy)
+            d = [(x - 1, y), (x, y + 1), (x + 1, y), (x, y - 1)]
+            shuffle(d)
+            for (xx, yy) in d:
+                if vis[yy][xx]: continue
+                if xx == x: hor[max(y, yy)][x] = "10"
+                if yy == y: ver[y][max(x, xx)] = "00"
+                walk(xx, yy)
 
-    	walk(randrange(w), randrange(h))
-    	maze = []
-    	for (a, b) in zip(hor, ver):
-    		if a:
-    			row1 = ''.join(a)
-    		row2 = ''.join(b)
-    		r1_ls = []
-    		r2_ls = []
-    		for thing in row1:
-    			thing = int(thing)
-    			r1_ls.append(thing)
-    		for thing in row2:
-    			thing = int(thing)
-    			r2_ls.append(thing)
-    		if r1_ls:
-    			maze.append(r1_ls)
-    		if r2_ls:
-    			maze.append(r2_ls)
+        walk(randrange(w), randrange(h))
+        maze = []
+        for (a, b) in zip(hor, ver):
+            if a:
+                row1 = ''.join(a)
+            row2 = ''.join(b)
+            r1_ls = []
+            r2_ls = []
+            for thing in row1:
+                thing = int(thing)
+                r1_ls.append(thing)
+            for thing in row2:
+                thing = int(thing)
+                r2_ls.append(thing)
+            if r1_ls:
+                maze.append(r1_ls)
+            if r2_ls:
+                maze.append(r2_ls)
 
-    	return maze
+        return maze
 
 
     @staticmethod
