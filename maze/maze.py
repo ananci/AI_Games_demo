@@ -271,7 +271,7 @@ def main(width, height, random_start, random_goal, empty, delay, starting_node=N
 
         # This is your custom search
         start = time.time()
-        my_path = random_search(start_node, maze)
+        my_path = my_search(start_node, maze)
         my_time_delta = time.time() - start
         my_maze = copy.deepcopy(maze)
         methods["CUSTOM"] = my_path
